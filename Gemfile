@@ -12,11 +12,17 @@ gem 'coffee-rails', '~> 4.2'
 gem 'turbolinks', '~> 5'
 gem 'jbuilder', '~> 2.5'
 gem 'bootsnap', '>= 1.1.0', require: false
+gem 'rubocop', '~> 0.75.1', require: false
 
 group :development, :test do
   gem "rspec"
   gem "factory_bot"
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
+
+  gem 'rubocop', '~> 0.75.1', require: false
+  gem 'rubocop-rails'
+  gem 'rubocop-performance'
+  gem 'rubocop-rspec'
 end
 
 group :development do
