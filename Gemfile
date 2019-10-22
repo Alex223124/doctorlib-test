@@ -14,6 +14,8 @@ gem 'jbuilder', '~> 2.5'
 gem 'bootsnap', '>= 1.1.0', require: false
 
 group :development, :test do
+  gem "rspec"
+  gem "factory_bot"
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
 end
 
