@@ -480,7 +480,7 @@ RSpec.describe Slot, type: :model do
           @ends_at_two = @ends_at + 1.day
           create :opening_event, :with_opening_slots,
                  starts_at: @starts_at_two, ends_at: @ends_at_two,
-                 weekly_recurring: true
+                 weekly_recurring: false
         end
 
         it "should find weekly available weekly slots specified date range" do
@@ -497,7 +497,7 @@ RSpec.describe Slot, type: :model do
           @ends_at = DateTime.now.beginning_of_hour + 9.hours + 30.minutes
           @opening = create :opening_event, :with_booked_opening_slots,
                             starts_at: @starts_at, ends_at: @ends_at,
-                            weekly_recurring: true
+                            weekly_recurring: false
         end
 
         it "should find 0 records" do

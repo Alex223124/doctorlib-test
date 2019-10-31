@@ -158,16 +158,16 @@ RSpec.describe Event, type: :model do
           current_hour = DateTime.now.beginning_of_hour
           starts_at = current_hour + 9.hours
           availabilities = Event.availabilities(starts_at)
-          expected_result = [{:date=>"#{starts_at.strftime("%Y-%m-%d")}",
-                              :slots=>["#{(current_hour + 6.hours).strftime("%H:%M")}",
-                                       "#{(current_hour + 6.hours + 30.minutes).strftime("%H:%M")}",
-                                       "#{(current_hour + 7.hours).strftime("%H:%M")}"]},
+          expected_result = [{:date=>"#{starts_at.strftime("%Y-%m-%d")}", :slots=>[]},
                              {:date=>"#{(starts_at + 1.day).strftime("%Y-%m-%d")}", :slots=>[]},
                              {:date=>"#{(starts_at + 2.day).strftime("%Y-%m-%d")}", :slots=>[]},
                              {:date=>"#{(starts_at + 3.day).strftime("%Y-%m-%d")}", :slots=>[]},
                              {:date=>"#{(starts_at + 4.day).strftime("%Y-%m-%d")}", :slots=>[]},
                              {:date=>"#{(starts_at + 5.day).strftime("%Y-%m-%d")}", :slots=>[]},
-                             {:date=>"#{(starts_at + 6.day).strftime("%Y-%m-%d")}", :slots=>[]}]
+                             {:date=>"#{(starts_at + 6.day).strftime("%Y-%m-%d")}",
+                              :slots=>["#{(current_hour + 6.hours).strftime("%H:%M")}",
+                                       "#{(current_hour + 6.hours + 30.minutes).strftime("%H:%M")}",
+                                       "#{(current_hour + 7.hours).strftime("%H:%M")}"]}]
           expect(availabilities).to eql(expected_result)
         end
       end
