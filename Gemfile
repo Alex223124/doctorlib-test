@@ -17,10 +17,14 @@ gem 'uglifier', '>= 1.3.0'
 
 group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
-  gem 'database_cleaner'
-  gem 'factory_bot'
+  gem 'pry'
+  gem 'database_cleaner', '~> 1.7'
+  gem 'factory_bot_rails'
   gem 'rspec'
   gem 'rspec-rails'
+  gem 'shoulda-matchers', '~> 3.1'
+  gem 'timecop'
+
 
   gem 'rubocop', '~> 0.75.1', require: false
   gem 'rubocop-performance'
