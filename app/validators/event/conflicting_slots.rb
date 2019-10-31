@@ -23,5 +23,3 @@ class Validators::Event::ConflictingSlots < ActiveModel::Validator
   end
 
 end
-
-
