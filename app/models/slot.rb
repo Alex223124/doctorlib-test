@@ -10,10 +10,23 @@ class Slot < ApplicationRecord
 
   validates_presence_of :begins_at_date, :begins_at_time, :day_of_the_week
 
+  scope :actual, -> { where("begins_at_date > ?", DateTime.current)}
   scope :opened_between_date, lambda {|starts_at, ends_at| where("begins_at_date >= ? AND begins_at_date <= ?", starts_at, ends_at)}
   scope :weekly, -> { where(is_weekly: true) }
+  scope :not_weekly, -> { where(is_weekly: false) }
   scope :by_week_day, lambda {|week_day| where("day_of_the_week = ?", week_day)}
   scope :opened_between_time, lambda {|starts_at, ends_at| where("begins_at_time >= ? AND (begins_at_time + #{HALF_AN_HOUR_IN_SECONDS}) <= ?", starts_at, ends_at)}
+  scope :not_booked_in_regular, -> { where(is_fully_booked: false) }
+
+
+  def self.available_slots_for(event)
+    Slot.available_regular_slots(event.starts_at, event.ends_at) +
+    Slot.find_weekly_slots(event.starts_at_time, event.ends_at_time, event.day_of_the_week)
+  end
+
+  def self.available_regular_slots(starts_at, ends_at)
+    actual.not_weekly.opened_between_date(starts_at, ends_at).not_booked_in_regular
+  end
 
   def self.find_weekly_slots(starts_at_time, ends_at_time, week_day)
     weekly.by_week_day(week_day).opened_between_time(starts_at_time, ends_at_time)
@@ -26,6 +39,10 @@ class Slot < ApplicationRecord
 
   def self.possible_slots_amount_in(date_range)
     date_range / (MINUTES_IN_ONE_SLOT * SECONDS_IN_ONE_MINUTE)
+  end
+
+  def ends_at_time
+    begins_at_time + HALF_AN_HOUR_IN_SECONDS
   end
 
 end
