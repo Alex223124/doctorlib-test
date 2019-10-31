@@ -13,6 +13,18 @@ class Event < ApplicationRecord
   validates_with Validators::Event::ConflictingSlots, if: :is_opening?
   validates_with Validators::Event::SlotsPresence, if: :is_appointment?
 
+  def is_opening?
+    kind == "opening"
+  end
+
+  def is_appointment?
+    kind == "appointment"
+  end
+
+  def is_weekly?
+    weekly_recurring == true
+  end
+
   def starts_at_time
     in_seconds(starts_at)
   end
@@ -27,6 +39,10 @@ class Event < ApplicationRecord
 
   def date_range
     ends_at - starts_at
+  end
+
+  def ends_at_time
+    in_seconds(ends_at)
   end
 
 end

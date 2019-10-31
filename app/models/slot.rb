@@ -49,4 +49,7 @@ class Slot < ApplicationRecord
     is_weekly == false
   end
 
+  def begins_at_hours
+    Time.at(begins_at_time).utc.strftime("%H:%M")
+  end
 end
