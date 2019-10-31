@@ -9,4 +9,6 @@ class Event < ApplicationRecord
   validates_presence_of :starts_at, :ends_at, :kind
   validates :kind, inclusion: { in: KINDS, message: "%{value} is not valid. Should be one: #{KINDS.join(" OR ")}"  }
 
+  validates_with Validators::Event::DateRange, if: :is_opening?
+
 end
