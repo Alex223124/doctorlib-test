@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Slot < ApplicationRecord
 
   MINUTES_IN_ONE_SLOT = 30.freeze
@@ -17,7 +18,9 @@ class Slot < ApplicationRecord
   scope :by_week_day, lambda {|week_day| where("day_of_the_week = ?", week_day)}
   scope :opened_between_time, lambda {|starts_at, ends_at| where("begins_at_time >= ? AND (begins_at_time + #{HALF_AN_HOUR_IN_SECONDS}) <= ?", starts_at, ends_at)}
   scope :not_booked_in_regular, -> { where(is_fully_booked: false) }
-
+  scope :booked_in_weekly, -> (start_date, end_date) {
+    weekly.joins(:appointments).where("DATE(events.starts_at) >= ? AND DATE(events.starts_at) <= ?", start_date, end_date)
+  }
 
   def self.available_slots_for(event)
     Slot.available_regular_slots(event.starts_at, event.ends_at) +
@@ -39,6 +42,12 @@ class Slot < ApplicationRecord
 
   def self.possible_slots_amount_in(date_range)
     date_range / (MINUTES_IN_ONE_SLOT * SECONDS_IN_ONE_MINUTE)
+  end
+
+  def self.available_weekly_slots(starts_at_date, ends_at_date)
+    weekly_slots = Slot.weekly
+    booked_slots = Slot.booked_in_weekly(starts_at_date, ends_at_date)
+    weekly_slots - booked_slots
   end
 
   def ends_at_time

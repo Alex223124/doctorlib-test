@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Event < ApplicationRecord
 
   KINDS = ["opening", 'appointment'].freeze
@@ -12,6 +13,12 @@ class Event < ApplicationRecord
   validates_with Validators::Event::DateRange, if: :is_opening?
   validates_with Validators::Event::ConflictingSlots, if: :is_opening?
   validates_with Validators::Event::SlotsPresence, if: :is_appointment?
+
+  def self.availabilities(starts_at)
+    return if starts_at < Time.now
+    service = Services::Slots::Availabilities.new(starts_at)
+    service.call
+  end
 
   def is_opening?
     kind == "opening"
