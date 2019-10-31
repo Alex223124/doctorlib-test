@@ -67,17 +67,26 @@ RSpec.configure do |config|
   # FactoryBot configuration
   config.include FactoryBot::Syntax::Methods
 
-  config.before :suite do
-    DatabaseCleaner.clean_with :truncation
-  end
-
-  config.before :suite do
+  config.before(:suite) do
     DatabaseCleaner.strategy = :transaction
-    DatabaseCleaner.clean_with :truncation
+    DatabaseCleaner.clean_with(:truncation)
   end
 
-  config.around do |example|
-    DatabaseCleaner.cleaning { example.run }
+  config.before(:each) do
+    DatabaseCleaner.start
+  end
+
+  config.after(:each) do
+    DatabaseCleaner.clean
+  end
+
+  # Shoulda-matchers configuration
+  # https://github.com/thoughtbot/shoulda-matchers
+  Shoulda::Matchers.configure do |conf|
+    conf.integrate do |with|
+      with.test_framework :rspec
+      with.library :rails
+    end
   end
 
 end
