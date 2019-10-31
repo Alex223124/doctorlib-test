@@ -21,6 +21,10 @@ class Event < ApplicationRecord
     time.seconds_since_midnight.to_i
   end
 
+  def day_of_the_week
+    starts_at.wday
+  end
+
   def date_range
     ends_at - starts_at
   end
