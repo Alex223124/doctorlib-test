@@ -11,4 +11,8 @@ class Event < ApplicationRecord
 
   validates_with Validators::Event::DateRange, if: :is_opening?
 
+  def date_range
+    ends_at - starts_at
+  end
+
 end
