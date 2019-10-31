@@ -11,6 +11,7 @@ class Event < ApplicationRecord
 
   validates_with Validators::Event::DateRange, if: :is_opening?
   validates_with Validators::Event::ConflictingSlots, if: :is_opening?
+  validates_with Validators::Event::SlotsPresence, if: :is_appointment?
 
   def starts_at_time
     in_seconds(starts_at)
