@@ -10,6 +10,14 @@ class Slot < ApplicationRecord
 
   validates_presence_of :begins_at_date, :begins_at_time, :day_of_the_week
 
+  scope :opened_between_date, lambda {|starts_at, ends_at| where("begins_at_date >= ? AND begins_at_date <= ?", starts_at, ends_at)}
+  scope :weekly, -> { where(is_weekly: true) }
+  scope :by_week_day, lambda {|week_day| where("day_of_the_week = ?", week_day)}
+  scope :opened_between_time, lambda {|starts_at, ends_at| where("begins_at_time >= ? AND (begins_at_time + #{HALF_AN_HOUR_IN_SECONDS}) <= ?", starts_at, ends_at)}
+
+  def self.find_weekly_slots(starts_at_time, ends_at_time, week_day)
+    weekly.by_week_day(week_day).opened_between_time(starts_at_time, ends_at_time)
+  end
 
   def self.possible_starts_at_time_marks(event)
     time_marks = Array.new(possible_slots_amount_in(event.date_range), event.starts_at_time)
