@@ -10,6 +10,7 @@ class Event < ApplicationRecord
   validates :kind, inclusion: { in: KINDS, message: "%{value} is not valid. Should be one: #{KINDS.join(" OR ")}"  }
 
   validates_with Validators::Event::DateRange, if: :is_opening?
+  validates_with Validators::Event::ConflictingSlots, if: :is_opening?
 
   def starts_at_time
     in_seconds(starts_at)
