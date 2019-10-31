@@ -45,4 +45,8 @@ class Slot < ApplicationRecord
     begins_at_time + HALF_AN_HOUR_IN_SECONDS
   end
 
+  def is_regular?
+    is_weekly == false
+  end
+
 end
